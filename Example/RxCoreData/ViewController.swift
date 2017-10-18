@@ -54,13 +54,12 @@ class ViewController: UIViewController {
         
         // Animated
 
-        let animatedDataSource = RxTableViewSectionedAnimatedDataSource<AnimatableSectionModel<String, Event>>()
-        animatedDataSource.configureCell = { dateSource, tableView, indexPath, event in
-            let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-            cell.textLabel?.text = "\(event.date)"
-            return cell
-        }
-        
+      let animatedDataSource = RxTableViewSectionedAnimatedDataSource<AnimatableSectionModel<String, Event>>(configureCell: { dateSource, tableView, indexPath, event in
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        cell.textLabel?.text = "\(event.date)"
+        return cell
+        })
+      
         managedObjectContext.rx.entities(Event.self, sortDescriptors: [NSSortDescriptor(key: "date", ascending: false)])
             .map { events in
                 [AnimatableSectionModel(model: "Section 1", items: events)]
